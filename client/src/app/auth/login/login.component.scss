@@ -1,0 +1,893 @@
+// ============================================================
+//  GROOV GASTROBAR — FINAL PREMIUM LOGIN PAGE
+// ============================================================
+
+// ─── Design Tokens ───────────────────────────────────────────
+$c-bg:          #0d0d0d;
+$c-surface:     #141414;
+$c-panel-bg:    #0a0a0a;
+
+$c-orange:      #FF5E1A;
+$c-orange-dim:  #c94b14;
+$c-gold:        #C9A84C;
+$c-gold-light:  #e8c46a;
+$c-cream:       #f5ead8;
+
+$c-text:        #f0ece4;
+$c-text-muted:  #8a8070;
+$c-text-faint:  #4a4540;
+
+$c-border:      rgba(255, 255, 255, 0.07);
+$c-glass-bg:    rgba(20, 18, 16, 0.82);
+
+$shadow-card:
+  0 32px 80px rgba(0,0,0,0.7),
+  0 8px 24px rgba(0,0,0,0.4);
+
+$dur-slow:      32s;
+$dur-med:       24s;
+$dur-fast:      18s;
+
+$ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+$bp-tablet: 900px;
+$bp-mobile: 600px;
+
+// ─── Keyframes ───────────────────────────────────────────────
+@keyframes scrollUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+@keyframes scrollUpFast {
+  from { transform: translateY(-8%); }
+  to   { transform: translateY(-58%); }
+}
+
+@keyframes scrollUpMid {
+  from { transform: translateY(-4%); }
+  to   { transform: translateY(-54%); }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseFocus {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255,94,26,0.2); }
+  50%      { box-shadow: 0 0 0 5px rgba(255,94,26,0.35); }
+}
+
+@keyframes brandFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+// ─── Reset ───────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// ─── Wrapper ─────────────────────────────────────────────────
+.login-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: $c-bg;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+// ─── Ambient Background ──────────────────────────────────────
+.ambient-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+
+  &--top {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: 10%;
+    background: radial-gradient(circle,
+      rgba(255,94,26,0.07) 0%,
+      transparent 70%);
+  }
+
+  &--right {
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    right: -100px;
+    background: radial-gradient(circle,
+      rgba(201,168,76,0.06) 0%,
+      transparent 70%);
+  }
+}
+
+.grid-texture {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+
+  background-size: 48px 48px;
+}
+
+// ─── LEFT PANEL ──────────────────────────────────────────────
+.login-panel {
+  position: relative;
+  width: 52%;
+  height: 100vh;
+  overflow: hidden;
+  background: $c-panel-bg;
+  flex-shrink: 0;
+
+  @media (max-width: $bp-tablet) {
+    width: 100%;
+    height: 220px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  @media (max-width: $bp-mobile) {
+    height: 180px;
+  }
+}
+
+.panel-overlay {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+
+  &--top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(to bottom,
+      rgba(10,10,10,1),
+      transparent);
+  }
+
+  &--bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(to top,
+      rgba(10,10,10,1),
+      transparent);
+  }
+
+  &--sides {
+    inset: 0;
+    background:
+      linear-gradient(to right,
+        rgba(10,10,10,0.5),
+        transparent 20%),
+      linear-gradient(to left,
+        rgba(10,10,10,0.8),
+        transparent 25%);
+  }
+}
+
+// ─── Brand ───────────────────────────────────────────────────
+.top-brand {
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  z-index: 20;
+  animation: fadeSlideIn 0.8s $ease-smooth both;
+
+  .brand-logo {
+    display: block;
+    font-size: 2rem;
+    font-weight: 900;
+    color: $c-text;
+    letter-spacing: 0.12em;
+
+    .brand-oo {
+      color: $c-orange;
+    }
+  }
+
+  .brand-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: $c-gold;
+  }
+}
+
+// ─── Tagline ─────────────────────────────────────────────────
+.panel-tagline {
+  position: absolute;
+  bottom: 42px;
+  left: 34px;
+  z-index: 20;
+  max-width: 280px;
+
+  @media (max-width: $bp-tablet) {
+    display: none;
+  }
+}
+
+.tagline-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: $c-text;
+  margin-bottom: 12px;
+}
+
+.tagline-sub {
+  font-size: 0.8rem;
+  color: $c-text-muted;
+}
+
+// ─── Food Grid ───────────────────────────────────────────────
+.food-grid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 12px;
+  padding: 0 12px;
+}
+
+.food-col {
+  flex: 1;
+  overflow: hidden;
+
+  &--1 .food-strip {
+    animation: scrollUp $dur-slow linear infinite;
+  }
+
+  &--2 .food-strip {
+    animation: scrollUpMid $dur-med linear infinite;
+  }
+
+  &--3 .food-strip {
+    animation: scrollUpFast $dur-fast linear infinite;
+  }
+
+  &--2 {
+    margin-top: -70px;
+  }
+
+  &--3 {
+    margin-top: -130px;
+  }
+}
+
+.food-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.food-card {
+  position: relative;
+  height: 140px;
+  border-radius: 18px;
+  overflow: hidden;
+
+  transform:
+    rotate(var(--rot, 0deg))
+    scale(var(--sz, 1));
+
+  transition:
+    transform 0.4s $ease-smooth,
+    box-shadow 0.4s $ease-smooth;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(255,255,255,0.04);
+
+  &--tall {
+    height: 190px;
+  }
+
+  &--wide {
+    height: 120px;
+  }
+
+  &:hover {
+    transform:
+      rotate(0deg)
+      scale(1.05)
+      translateY(-4px);
+
+    z-index: 2;
+
+    .food-img {
+      transform: scale(1.06);
+      filter: brightness(1.1) saturate(1.15);
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.02),
+        rgba(0,0,0,0.28)
+      );
+
+    pointer-events: none;
+  }
+}
+
+.food-img {
+  width: 100%;
+  height: 100%;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  transition:
+    transform 0.5s $ease-smooth,
+    filter 0.4s $ease-smooth;
+}
+
+// ─── RIGHT SIDE ──────────────────────────────────────────────
+.login-form-area {
+  flex: 1;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 24px;
+
+  position: relative;
+  z-index: 10;
+
+  overflow: hidden;
+
+  animation: cardReveal 0.9s $ease-smooth both;
+
+  @media (max-width: $bp-tablet) {
+    padding: 220px 20px 24px;
+    align-items: flex-start;
+  }
+
+  @media (max-width: $bp-mobile) {
+    padding: 180px 14px 20px;
+  }
+}
+
+// ─── Login Card ──────────────────────────────────────────────
+.login-card {
+  width: 100%;
+  max-width: 430px;
+
+  background: $c-glass-bg;
+
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  border: 1px solid $c-border;
+  border-radius: 24px;
+
+  box-shadow: $shadow-card;
+
+  overflow: hidden;
+  position: relative;
+
+  transform: scale(0.91);
+  transform-origin: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+      135deg,
+      rgba(255,94,26,0.04),
+      transparent 50%,
+      rgba(201,168,76,0.03)
+    );
+
+    pointer-events: none;
+  }
+
+  @media (max-width: $bp-mobile) {
+    transform: scale(0.96);
+  }
+}
+
+// ─── Accent Bar ──────────────────────────────────────────────
+.card-accent-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.04);
+}
+
+.accent-bar-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    $c-orange,
+    $c-gold,
+    $c-orange
+  );
+}
+
+// ─── Header ──────────────────────────────────────────────────
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 18px 28px 10px;
+
+  @media (max-width: $bp-mobile) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px 20px 10px;
+  }
+}
+
+.card-logo {
+  animation: brandFloat 4s ease-in-out infinite;
+}
+
+.card-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+
+  color: $c-gold;
+}
+
+.card-title {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: $c-text;
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 0.78rem;
+  color: $c-text-muted;
+}
+
+// ─── Divider ─────────────────────────────────────────────────
+.modal-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 0 28px;
+  margin: 2px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    $c-border,
+    transparent
+  );
+}
+
+.divider-diamond {
+  font-size: 0.5rem;
+  color: $c-gold;
+}
+
+// ─── Error Banner ────────────────────────────────────────────
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 8px 28px 0;
+  padding: 12px 14px;
+
+  border-radius: 12px;
+
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+
+  color: #fca5a5;
+  font-size: 0.82rem;
+}
+
+// ─── Form ────────────────────────────────────────────────────
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 10px 28px 0;
+
+  @media (max-width: $bp-mobile) {
+    padding: 10px 20px 0;
+  }
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  color: $c-text-muted;
+}
+
+.label-index {
+  color: $c-orange;
+  font-size: 0.65rem;
+}
+
+// ─── Inputs ──────────────────────────────────────────────────
+.field-wrapper {
+  position: relative;
+}
+
+.field-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+  color: $c-text-muted;
+
+  z-index: 1;
+}
+
+.field-input {
+  width: 100%;
+  height: 50px;
+
+  padding: 0 44px 0 42px;
+
+  border-radius: 14px;
+  border: 1px solid $c-border;
+
+  background: rgba(255,255,255,0.04);
+
+  color: $c-text;
+  font-size: 0.9rem;
+
+  outline: none;
+
+  transition:
+    border-color 0.25s,
+    background 0.25s,
+    box-shadow 0.25s;
+
+  &::placeholder {
+    color: $c-text-faint;
+  }
+
+  &:focus {
+    border-color: rgba(255,94,26,0.5);
+
+    background: rgba(255,94,26,0.04);
+
+    box-shadow:
+      0 0 0 3px rgba(255,94,26,0.12),
+      0 4px 16px rgba(0,0,0,0.3);
+
+    animation: pulseFocus 2s ease-in-out infinite;
+  }
+}
+
+// ─── Toggle Password ─────────────────────────────────────────
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+
+  color: $c-text-muted;
+  cursor: pointer;
+
+  padding: 6px;
+  border-radius: 8px;
+
+  transition: 0.2s;
+
+  &:hover {
+    color: $c-orange;
+    background: rgba(255,94,26,0.1);
+  }
+}
+
+// ─── Meta ────────────────────────────────────────────────────
+.form-meta {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: -4px;
+}
+
+.forgot-link {
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: $c-text-muted;
+
+  &:hover {
+    color: $c-orange;
+  }
+}
+
+// ─── CAPTCHA ────────────────────────────────────────────────
+.captcha-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.captcha-label {
+  margin-bottom: 2px;
+}
+
+.captcha-wrapper {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 2px;
+
+  border-radius: 14px;
+
+  transform: scale(0.88);
+  transform-origin: center;
+
+  iframe {
+    border-radius: 12px;
+  }
+}
+
+// ─── Submit Button ───────────────────────────────────────────
+.submit-btn {
+  position: relative;
+
+  width: 100%;
+  height: 54px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    $c-orange,
+    $c-orange-dim
+  );
+
+  color: white;
+
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  overflow: hidden;
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  box-shadow:
+    0 4px 20px rgba(255,94,26,0.35),
+    0 2px 8px rgba(0,0,0,0.3);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 8px 32px rgba(255,94,26,0.45),
+      0 4px 16px rgba(0,0,0,0.4);
+
+    .submit-btn__shimmer {
+      animation: shimmer 0.7s ease-in-out;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.submit-btn__text {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submit-btn__shimmer {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255,255,255,0.25) 50%,
+    transparent 80%
+  );
+
+  transform: translateX(-100%) skewX(-15deg);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+
+  animation: spin 0.7s linear infinite;
+}
+
+// ─── Footer ──────────────────────────────────────────────────
+.card-footer {
+  padding: 0 28px 10px;
+  text-align: center;
+
+  p {
+    font-size: 0.8rem;
+    color: $c-text-muted;
+    line-height: 1.5;
+  }
+
+  @media (max-width: $bp-mobile) {
+    padding: 0 20px 12px;
+  }
+}
+
+.register-link {
+  color: $c-orange;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    color: $c-gold;
+  }
+}
+
+// ─── Responsive ──────────────────────────────────────────────
+@media (max-width: $bp-tablet) {
+
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .food-col--3 {
+    display: none;
+  }
+
+  .food-card {
+    height: 120px;
+
+    &--tall {
+      height: 160px;
+    }
+
+    &--wide {
+      height: 100px;
+    }
+  }
+}
+
+@media (max-width: $bp-mobile) {
+
+  .food-col--2 {
+    display: none;
+  }
+
+  .food-grid {
+    gap: 10px;
+    padding-inline: 10px;
+  }
+
+  .food-card {
+    border-radius: 14px;
+  }
+
+  .captcha-wrapper {
+    transform: scale(0.78);
+  }
+}
+
+// ─── Reduced Motion ──────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+
+  .food-strip,
+  .food-col--1 .food-strip,
+  .food-col--2 .food-strip,
+  .food-col--3 .food-strip {
+    animation: none !important;
+  }
+
+  .card-logo,
+  .submit-btn__shimmer {
+    animation: none !important;
+  }
+}

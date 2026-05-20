@@ -1,0 +1,966 @@
+/* ============================================================
+   register.component.scss
+   GROOV GASTROBAR — Premium Register Page
+   Fixed viewport + scrollable form + seamless food grid
+   ============================================================ */
+
+:host {
+  --bg: #0d0d0d;
+  --panel-bg: #0a0a0a;
+
+  --orange: #ff5e1a;
+  --orange-dim: #c94b14;
+  --gold: #c9a84c;
+
+  --text: #f0ece4;
+  --muted: #8a8070;
+  --faint: #4a4540;
+
+  --glass: rgba(20, 18, 16, 0.86);
+  --glass-strong: rgba(14, 12, 10, 0.94);
+
+  --border: rgba(255, 255, 255, 0.07);
+  --border-soft: rgba(255, 255, 255, 0.045);
+
+  --error: #fca5a5;
+  --success: #7ce0a3;
+
+  --radius: 24px;
+  --input-radius: 14px;
+
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- Animations ------------------------------------- */
+@keyframes scrollUp {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes scrollUpMid {
+  from {
+    transform: translateY(-4%);
+  }
+
+  to {
+    transform: translateY(-54%);
+  }
+}
+
+@keyframes scrollUpFast {
+  from {
+    transform: translateY(-8%);
+  }
+
+  to {
+    transform: translateY(-58%);
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateX(34px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes brandFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+/* ---------- Base ------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Wrapper ---------------------------------------- */
+.register-wrapper {
+  width: 100%;
+  height: 100vh;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+
+  background: var(--bg);
+  font-family: 'Jost', 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+/* ---------- Ambient ---------------------------------------- */
+.ambient-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+
+  &--top {
+    width: 620px;
+    height: 620px;
+    top: -220px;
+    right: 6%;
+    background: radial-gradient(circle, rgba(255, 94, 26, 0.08), transparent 70%);
+  }
+
+  &--right {
+    width: 420px;
+    height: 420px;
+    bottom: -140px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(201, 168, 76, 0.07), transparent 70%);
+  }
+}
+
+.grid-texture {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+
+  background-size: 48px 48px;
+  opacity: 0.7;
+}
+
+/* ---------- Left Food Panel -------------------------------- */
+.register-panel {
+  width: 52%;
+  height: 100vh;
+
+  position: relative;
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  background: var(--panel-bg);
+}
+
+.panel-overlay {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+
+  &--top {
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 190px;
+
+    background: linear-gradient(to bottom, rgba(10, 10, 10, 1), transparent);
+  }
+
+  &--bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 190px;
+
+    background: linear-gradient(to top, rgba(10, 10, 10, 1), transparent);
+  }
+
+  &--sides {
+    inset: 0;
+
+    background:
+      linear-gradient(to right, rgba(10, 10, 10, 0.48), transparent 22%),
+      linear-gradient(to left, rgba(10, 10, 10, 0.82), transparent 28%);
+  }
+}
+
+/* ---------- Left Brand ------------------------------------- */
+.top-brand {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  z-index: 20;
+}
+
+.brand-logo {
+  display: block;
+
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+
+  color: var(--text);
+  letter-spacing: 0.12em;
+
+  .brand-oo {
+    color: var(--orange);
+  }
+}
+
+.brand-sub {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 0.62rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+
+  color: var(--gold);
+}
+
+/* ---------- Tagline ---------------------------------------- */
+.panel-tagline {
+  position: absolute;
+  bottom: 48px;
+  left: 36px;
+  z-index: 20;
+  max-width: 290px;
+}
+
+.tagline-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.02;
+
+  color: var(--text);
+
+  margin: 0 0 12px;
+}
+
+.tagline-sub {
+  margin: 0;
+
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* ---------- Food Grid Seamless ----------------------------- */
+.food-grid {
+  position: absolute;
+  inset: 0;
+
+  z-index: 5;
+
+  display: flex;
+  gap: 12px;
+
+  padding: 0 12px;
+}
+
+.food-col {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+
+  &--1 .food-strip {
+    animation: scrollUp 34s linear infinite;
+  }
+
+  &--2 {
+    margin-top: -80px;
+
+    .food-strip {
+      animation: scrollUpMid 26s linear infinite;
+    }
+  }
+
+  &--3 {
+    margin-top: -150px;
+
+    .food-strip {
+      animation: scrollUpFast 20s linear infinite;
+    }
+  }
+}
+
+.food-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding: 6px 0;
+
+  will-change: transform;
+}
+
+.food-card {
+  position: relative;
+
+  height: 155px;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.58),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045);
+
+  filter: saturate(1.08) brightness(0.86);
+
+  &--tall {
+    height: 205px;
+  }
+
+  &--wide {
+    height: 125px;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.28));
+
+    pointer-events: none;
+  }
+}
+
+.food-img {
+  width: 100%;
+  height: 100%;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  transition: transform 0.5s var(--ease), filter 0.4s var(--ease);
+}
+
+.food-card:hover .food-img {
+  transform: scale(1.06);
+  filter: brightness(1.1) saturate(1.15);
+}
+
+/* ---------- Right Form Area -------------------------------- */
+.register-form-area {
+  flex: 1;
+  height: 100vh;
+
+  position: relative;
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px 24px;
+
+  overflow: hidden;
+}
+
+/* ---------- Main Register Card ----------------------------- */
+.register-card {
+  width: 100%;
+  max-width: 540px;
+  max-height: calc(100vh - 36px);
+
+  position: relative;
+
+  background: var(--glass);
+
+  backdrop-filter: blur(24px) saturate(1.35);
+  -webkit-backdrop-filter: blur(24px) saturate(1.35);
+
+  border: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+
+  border-radius: var(--radius);
+
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.7),
+    0 8px 24px rgba(0, 0, 0, 0.38);
+
+  overflow: hidden;
+
+  animation: cardIn 0.75s var(--ease) both;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+      135deg,
+      rgba(255, 94, 26, 0.045),
+      transparent 48%,
+      rgba(201, 168, 76, 0.035)
+    );
+
+    pointer-events: none;
+  }
+}
+
+.card-accent-bar {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.accent-bar-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(90deg, var(--orange), var(--gold), var(--orange));
+}
+
+/* ---------- Scrollable Form Only --------------------------- */
+.card-form {
+  position: relative;
+  z-index: 2;
+
+  max-height: calc(100vh - 39px);
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 94, 26, 0.45) rgba(255, 255, 255, 0.04);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 94, 26, 0.45);
+    border-radius: 999px;
+  }
+}
+
+/* ---------- Header ----------------------------------------- */
+.header-eyebrow {
+  display: block;
+
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+
+  color: var(--gold);
+
+  margin-bottom: 6px;
+}
+
+.header-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+
+  font-size: clamp(1.85rem, 3vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.08;
+
+  color: var(--text);
+
+  margin: 0;
+}
+
+/* ---------- Alerts ----------------------------------------- */
+.msg-success,
+.msg-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 11px 14px;
+
+  border-radius: 13px;
+
+  font-size: 0.82rem;
+}
+
+.msg-success {
+  background: rgba(34, 197, 94, 0.11);
+  border: 1px solid rgba(34, 197, 94, 0.24);
+  color: var(--success);
+}
+
+.msg-error {
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: var(--error);
+}
+
+/* ---------- Labels ----------------------------------------- */
+.field-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+
+  color: var(--muted);
+}
+
+/* ---------- Inputs ----------------------------------------- */
+.input-wrap {
+  position: relative;
+}
+
+.i-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+
+  color: var(--muted);
+
+  pointer-events: none;
+
+  transition: color 0.22s ease;
+}
+
+.f-input {
+  width: 100%;
+  height: 50px;
+
+  padding: 0 14px 0 42px;
+
+  border-radius: var(--input-radius);
+  border: 1px solid var(--border);
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: var(--text);
+
+  font-family: 'Jost', 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+
+  outline: none;
+
+  transition:
+    border-color 0.24s ease,
+    background 0.24s ease,
+    box-shadow 0.24s ease;
+
+  &::placeholder {
+    color: rgba(138, 128, 112, 0.62);
+  }
+
+  &:focus {
+    border-color: rgba(255, 94, 26, 0.52);
+    background: rgba(255, 94, 26, 0.04);
+
+    box-shadow:
+      0 0 0 3px rgba(255, 94, 26, 0.12),
+      0 4px 16px rgba(0, 0, 0, 0.28);
+  }
+
+  &.invalid {
+    border-color: rgba(252, 165, 165, 0.7);
+    background: rgba(220, 38, 38, 0.055);
+  }
+}
+
+.input-wrap:focus-within .i-icon {
+  color: var(--orange);
+}
+
+.f-error {
+  min-height: 16px;
+
+  margin-top: 5px;
+
+  color: var(--error);
+
+  font-size: 0.72rem;
+}
+
+/* ---------- OTP -------------------------------------------- */
+.otp-row {
+  display: flex;
+  gap: 10px;
+}
+
+.otp-btn,
+.verify-btn {
+  border: none;
+
+  border-radius: var(--input-radius);
+
+  background: linear-gradient(135deg, var(--orange), var(--orange-dim));
+
+  color: #ffffff;
+
+  font-size: 0.86rem;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+
+  box-shadow:
+    0 5px 18px rgba(255, 94, 26, 0.24),
+    0 2px 7px rgba(0, 0, 0, 0.28);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+      0 9px 26px rgba(255, 94, 26, 0.34),
+      0 3px 11px rgba(0, 0, 0, 0.36);
+  }
+
+  &:disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.otp-btn {
+  min-width: 116px;
+  height: 50px;
+}
+
+.verify-btn {
+  width: 100%;
+  height: 40px;
+}
+
+/* ---------- Password Strength ------------------------------ */
+.strength-bar {
+  display: flex;
+  gap: 5px;
+}
+
+.s-seg {
+  flex: 1;
+
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  transition: background 0.3s ease;
+}
+
+.s-seg.active:nth-child(1) {
+  background: #ef4444;
+}
+
+.s-seg.active:nth-child(2) {
+  background: #f59e0b;
+}
+
+.s-seg.active:nth-child(3) {
+  background: var(--gold);
+}
+
+.s-seg.active:nth-child(4) {
+  background: var(--success);
+}
+
+/* ---------- Role Chips ------------------------------------- */
+.role-group {
+  flex-wrap: nowrap;
+}
+
+.role-chip {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 12px 8px;
+
+  border-radius: var(--input-radius);
+  border: 1px solid var(--border);
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: var(--muted);
+
+  cursor: pointer;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+
+  user-select: none;
+
+  transition:
+    border-color 0.24s ease,
+    background 0.24s ease,
+    color 0.24s ease,
+    transform 0.24s ease,
+    box-shadow 0.24s ease;
+}
+
+.role-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.role-chip:hover {
+  border-color: rgba(255, 94, 26, 0.38);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.role-chip.selected {
+  border-color: rgba(255, 94, 26, 0.55);
+  background: rgba(255, 94, 26, 0.12);
+  color: #ffffff;
+
+  box-shadow:
+    0 0 0 3px rgba(255, 94, 26, 0.08),
+    0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Submit Button ---------------------------------- */
+.btn-register {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 54px;
+
+  border: none;
+  border-radius: var(--input-radius);
+
+  background: linear-gradient(135deg, var(--orange), var(--orange-dim));
+
+  color: #ffffff;
+
+  font-family: 'Jost', 'DM Sans', sans-serif;
+  font-size: 0.94rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+
+  cursor: pointer;
+  overflow: hidden;
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+
+  box-shadow:
+    0 6px 22px rgba(255, 94, 26, 0.34),
+    0 2px 8px rgba(0, 0, 0, 0.32);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+      105deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.24) 50%,
+      transparent 80%
+    );
+
+    transform: translateX(-100%) skewX(-15deg);
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 10px 34px rgba(255, 94, 26, 0.45),
+      0 4px 14px rgba(0, 0, 0, 0.42);
+
+    &::after {
+      animation: shimmer 0.75s ease;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.52;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.btn-register .spinner-border {
+  width: 1.05rem;
+  height: 1.05rem;
+  border-color: rgba(255, 255, 255, 0.45);
+  border-right-color: transparent;
+}
+
+/* ---------- Footer ----------------------------------------- */
+.footer-note {
+  color: var(--muted);
+
+  font-size: 0.82rem;
+
+  a {
+    color: var(--orange);
+    font-weight: 700;
+    text-decoration: none;
+
+    transition: color 0.22s ease, text-shadow 0.22s ease;
+
+    &:hover {
+      color: var(--gold);
+      text-shadow: 0 0 12px rgba(201, 168, 76, 0.38);
+    }
+  }
+}
+
+/* ---------- Responsive ------------------------------------- */
+@media (max-width: 900px) {
+  .register-wrapper {
+    flex-direction: column;
+  }
+
+  .register-panel {
+    width: 100%;
+    height: 240px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .register-form-area {
+    width: 100%;
+    height: 100vh;
+
+    padding: 250px 16px 20px;
+
+    align-items: flex-start;
+  }
+
+  .register-card {
+    max-width: 560px;
+    max-height: calc(100vh - 270px);
+  }
+
+  .card-form {
+    max-height: calc(100vh - 273px);
+  }
+
+  .panel-tagline {
+    display: none;
+  }
+
+  .food-col--3 {
+    display: none;
+  }
+
+  .food-card {
+    height: 125px;
+
+    &--tall {
+      height: 165px;
+    }
+
+    &--wide {
+      height: 100px;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .register-panel {
+    height: 210px;
+  }
+
+  .register-form-area {
+    padding: 220px 12px 16px;
+  }
+
+  .register-card {
+    border-radius: 20px;
+    max-height: calc(100vh - 236px);
+  }
+
+  .card-form {
+    max-height: calc(100vh - 239px);
+    padding: 24px 20px !important;
+  }
+
+  .header-title {
+    font-size: 1.65rem;
+  }
+
+  .otp-row {
+    flex-direction: column;
+  }
+
+  .otp-btn {
+    width: 100%;
+  }
+
+  .food-col--2 {
+    display: none;
+  }
+
+  .role-group {
+    flex-direction: column;
+  }
+
+  .role-chip {
+    justify-content: center;
+    padding: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .food-strip,
+  .food-col--1 .food-strip,
+  .food-col--2 .food-strip,
+  .food-col--3 .food-strip,
+  .register-card {
+    animation: none !important;
+  }
+}

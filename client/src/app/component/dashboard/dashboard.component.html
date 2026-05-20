@@ -1,0 +1,662 @@
+<div class="dashboard-shell" [ngClass]="'role-' + currentRole.toLowerCase()"
+  [class.sidebar-collapsed]="sidebarCollapsed">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-brand">
+        <span class="brand-icon">⚜</span>
+        <span class="brand-name">Let Me Dine</span>
+      </div>
+
+      <button class="sidebar-toggle" (click)="toggleSidebar()" title="Toggle Sidebar">
+        <span class="toggle-icon">{{ sidebarCollapsed ? '›' : '‹' }}</span>
+      </button>
+
+      <nav class="sidebar-nav">
+
+        <!-- ADMIN NAV -->
+        <ng-container *ngIf="isAdmin()">
+          <div class="nav-group-label">Overview</div>
+          <a class="nav-item" [class.active]="activeTab === 'admin-overview'" (click)="setTab('admin-overview')">
+            <span class="nav-icon">◈</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <div class="nav-group-label">Management</div>
+          <a class="nav-item" (click)="goToRestaurant()">
+            <span class="nav-icon">🏛</span>
+            <span class="nav-label">Restaurants</span>
+          </a>
+          <a class="nav-item" (click)="goToAssignManager()">
+            <span class="nav-icon">👔</span>
+            <span class="nav-label">Assign Managers</span>
+          </a>
+          <a class="nav-item" [class.active]="activeTab === 'admin-customers'" (click)="setTab('admin-customers')">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">Customers</span>
+          </a>
+          <div class="nav-group-label">Activity</div>
+          <a class="nav-item" (click)="goToOrders()">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Orders</span>
+          </a>
+          <a class="nav-item" (click)="goToFeedback()">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+        </ng-container>
+
+        <!-- MANAGER NAV -->
+        <ng-container *ngIf="isManager()">
+          <div class="nav-group-label">Overview</div>
+          <a class="nav-item" [class.active]="activeTab === 'manager-overview'" (click)="setTab('manager-overview')">
+            <span class="nav-icon">◈</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <div class="nav-group-label">Operations</div>
+          <a class="nav-item" (click)="goToMenuItems()">
+            <span class="nav-icon">🍽</span>
+            <span class="nav-label">Menu Items</span>
+          </a>
+          <a class="nav-item" (click)="goToOrders()">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Orders</span>
+          </a>
+          <a class="nav-item" (click)="goToFeedback()">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+          <a class="nav-item" [class.active]="activeTab === 'manager-customers'" (click)="setTab('manager-customers')">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">Customers</span>
+          </a>
+        </ng-container>
+
+        <!-- CUSTOMER NAV -->
+        <!-- <ng-container *ngIf="isCustomer()">
+          <div class="nav-group-label">My Account</div>
+          <a class="nav-item" [class.active]="activeTab === 'customer-home'" (click)="setTab('customer-home')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+          </a>
+          <a class="nav-item" [class.active]="activeTab === 'customer-order'" (click)="setTab('customer-order')">
+            <span class="nav-icon">🍴</span>
+            <span class="nav-label">Order</span>
+          </a>
+          <a class="nav-item" [class.active]="activeTab === 'customer-feedback'" (click)="setTab('customer-feedback')">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+        </ng-container> -->
+
+        <ng-container *ngIf="isCustomer()">
+          <div class="nav-group-label">My Account</div>
+
+          <a class="nav-item" [class.active]="activeTab === 'customer-home'" (click)="setTab('customer-home')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+          </a>
+
+          <a class="nav-item" (click)="goToOrders()">
+            <span class="nav-icon">🍴</span>
+            <span class="nav-label">Order</span>
+          </a>
+
+          <a class="nav-item" (click)="goToFeedback()">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+        </ng-container>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="user-avatar-sm">{{ userInitial }}</div>
+          <div class="user-info-sm">
+            <span class="user-name-sm">{{ username }}</span>
+            <span class="user-role-sm">{{ roleBadgeLabel }}</span>
+          </div>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Logout">
+          <span class="logout-icon">⏻</span>
+          <span class="logout-label">Logout</span>
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" (click)="toggleSidebar()">☰</button>
+        <div class="topbar-title">
+          <h1 class="page-title">{{ pageTitle }}</h1>
+          <span class="page-date">{{ currentDate }}</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="role-badge" [ngClass]="'badge-' + currentRole.toLowerCase()">
+          <span class="badge-dot"></span>
+          {{ roleBadgeLabel }}
+        </div>
+        <div class="topbar-user">
+          <div class="user-avatar">{{ userInitial }}</div>
+          <span class="topbar-username">{{ username }}</span>
+        </div>
+        <button class="topbar-logout" (click)="logout()">⏻</button>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- ═══════════════ ADMIN DASHBOARD ═══════════════ -->
+      <ng-container *ngIf="isAdmin() && activeTab === 'admin-overview'">
+
+        <div class="welcome-banner">
+          <div class="welcome-text">
+            <p class="welcome-greeting">Good to see you,</p>
+            <h2 class="welcome-name">
+              {{ username }}
+              <span class="welcome-role">/ Administrator</span>
+            </h2>
+            <p class="welcome-sub">Full system access · Manage restaurants, staff, customers, and operations.</p>
+          </div>
+          <div class="welcome-deco">⚜</div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-label">Overview</span>
+          <span class="section-line"></span>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-gold">🏛</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ restaurants.length }}</span>
+              <span class="kpi-label">Total Restaurants</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-blue">📋</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ orders.length }}</span>
+              <span class="kpi-label">Total Orders</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-success">💬</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ feedback.length }}</span>
+              <span class="kpi-label">Total Feedback</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-purple">👥</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ customers.length }}</span>
+              <span class="kpi-label">Total Customers</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-label">Quick Actions</span>
+          <span class="section-line"></span>
+        </div>
+
+        <div class="action-grid">
+          <div class="action-card" (click)="goToRestaurant()">
+            <div class="action-icon">🏛</div>
+            <div class="action-content">
+              <h3 class="action-title">Manage Restaurants</h3>
+              <p class="action-desc">Add, edit, and manage all restaurant profiles.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToAssignManager()">
+            <div class="action-icon">👔</div>
+            <div class="action-content">
+              <h3 class="action-title">Assign Managers</h3>
+              <p class="action-desc">Assign restaurant managers across locations.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToOrders()">
+            <div class="action-icon">📋</div>
+            <div class="action-content">
+              <h3 class="action-title">View Orders</h3>
+              <p class="action-desc">Browse all customer orders and track status.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="setTab('admin-customers')">
+            <div class="action-icon">👥</div>
+            <div class="action-content">
+              <h3 class="action-title">View Customers</h3>
+              <p class="action-desc">See all registered customer accounts.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+        </div>
+
+      </ng-container>
+
+      <!-- ADMIN CUSTOMER DETAILS -->
+      <ng-container *ngIf="isAdmin() && activeTab === 'admin-customers'">
+        <div class="section-header">
+          <span class="section-label">Customer Details</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">All Customers</span>
+            <span class="row-badge success">{{ customers.length }} records</span>
+          </div>
+          <div class="panel-body">
+            <div class="panel-empty" *ngIf="customers.length === 0">
+              <span class="empty-icon">👤</span>
+              <p>No customers found.</p>
+            </div>
+            <div class="table-responsive" *ngIf="customers.length > 0">
+              <table class="data-table w-100">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let customer of customers; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ customer.username || '—' }}</td>
+                    <td>{{ customer.email || '—' }}</td>
+                    <td><span class="row-badge success">{{ customer.role }}</span></td>
+                    <td><span class="row-badge active">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ═══════════════ MANAGER DASHBOARD ═══════════════ -->
+      <ng-container *ngIf="isManager() && activeTab === 'manager-overview'">
+
+        <div class="welcome-banner welcome-manager">
+          <div class="welcome-text">
+            <p class="welcome-greeting">Welcome back,</p>
+            <h2 class="welcome-name">
+              {{ username }}
+              <span class="welcome-role">/ Manager</span>
+            </h2>
+            <p class="welcome-sub">Manage menu items, track orders, view feedback, and monitor customers.</p>
+          </div>
+          <div class="welcome-deco">🍽</div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-label">Operations Overview</span>
+          <span class="section-line"></span>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-gold">🍽</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ menuItems.length }}</span>
+              <span class="kpi-label">Total Menu Items</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-blue">📋</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ orders.length }}</span>
+              <span class="kpi-label">Total Orders</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-success">👥</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ customers.length }}</span>
+              <span class="kpi-label">Total Customers</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-danger">⏳</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ pendingOrdersCount }}</span>
+              <span class="kpi-label">Pending Orders</span>
+            </div>
+            <div class="kpi-trend">—</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-label">Quick Actions</span>
+          <span class="section-line"></span>
+        </div>
+
+        <div class="action-grid action-grid-3">
+          <div class="action-card" (click)="goToMenuItems()">
+            <div class="action-icon">🍽</div>
+            <div class="action-content">
+              <h3 class="action-title">Manage Menu Items</h3>
+              <p class="action-desc">Add, update, or remove items from the menu.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToOrders()">
+            <div class="action-icon">📋</div>
+            <div class="action-content">
+              <h3 class="action-title">View Orders</h3>
+              <p class="action-desc">Monitor incoming orders and update statuses.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="setTab('manager-customers')">
+            <div class="action-icon">👥</div>
+            <div class="action-content">
+              <h3 class="action-title">View Customers</h3>
+              <p class="action-desc">Browse all registered customer details.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-label">Operations Summary</span>
+          <span class="section-line"></span>
+        </div>
+
+        <div class="panels-grid panels-grid-2">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Order Status Breakdown</span>
+              <button class="panel-link" (click)="goToOrders()">Manage →</button>
+            </div>
+            <div class="panel-body">
+              <div class="status-row">
+                <span class="status-label">Pending</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar pending" [style.width.%]="pendingOrdersPercent"></div>
+                </div>
+                <span class="status-count">{{ pendingOrdersCount }}</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">Processing</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar processing" [style.width.%]="processingOrdersPercent"></div>
+                </div>
+                <span class="status-count">{{ processingOrdersCount }}</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">Delivered</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar delivered" [style.width.%]="deliveredOrdersPercent"></div>
+                </div>
+                <span class="status-count">{{ deliveredOrdersCount }}</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">Cancelled</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar cancelled" [style.width.%]="cancelledOrdersPercent"></div>
+                </div>
+                <span class="status-count">{{ cancelledOrdersCount }}</span>
+              </div>
+              <div class="panel-empty" *ngIf="orders.length === 0">
+                <span class="empty-icon">📋</span>
+                <p>No order data.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Recent Customers</span>
+              <button class="panel-link" (click)="setTab('manager-customers')">View All →</button>
+            </div>
+            <div class="panel-body">
+              <ng-container *ngIf="recentCustomers.length > 0; else noCustomersPreview">
+                <div class="panel-row" *ngFor="let customer of recentCustomers">
+                  <span class="row-icon">👤</span>
+                  <span class="row-label">{{ customer.username || customer.email || 'Customer' }}</span>
+                  <span class="row-badge success">{{ customer.role }}</span>
+                </div>
+              </ng-container>
+              <ng-template #noCustomersPreview>
+                <div class="panel-empty">
+                  <span class="empty-icon">👥</span>
+                  <p>No customers found.</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+
+      <!-- MANAGER CUSTOMER DETAILS -->
+      <ng-container *ngIf="isManager() && activeTab === 'manager-customers'">
+        <div class="welcome-banner welcome-manager">
+          <div class="welcome-text">
+            <p class="welcome-greeting">Customer Management</p>
+            <h2 class="welcome-name">Customer Details <span class="welcome-role">/ Manager</span></h2>
+            <p class="welcome-sub">Browse all registered customer accounts on the platform.</p>
+          </div>
+          <div class="welcome-deco">👥</div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-label">Customers</span>
+          <span class="section-line"></span>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-success">👥</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ customers.length }}</span>
+              <span class="kpi-label">Total Customers</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-blue">✅</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ customers.length }}</span>
+              <span class="kpi-label">Active Accounts</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">All Customers</span>
+            <span class="row-badge success">{{ customers.length }} records</span>
+          </div>
+          <div class="panel-body">
+            <div class="panel-empty" *ngIf="customers.length === 0">
+              <span class="empty-icon">👤</span>
+              <p>No customers found.</p>
+            </div>
+            <div class="table-responsive" *ngIf="customers.length > 0">
+              <table class="data-table w-100">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let customer of customers; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <div class="avatar-cell">
+                        <span class="avatar">{{ (customer.username || customer.email || '?')[0] | uppercase }}</span>
+                        {{ customer.username || '—' }}
+                      </div>
+                    </td>
+                    <td>{{ customer.username || '—' }}</td>
+                    <td>{{ customer.email || '—' }}</td>
+                    <td><span class="row-badge success">{{ customer.role }}</span></td>
+                    <td><span class="row-badge active">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ═══════════════ CUSTOMER DASHBOARD ═══════════════ -->
+      <ng-container *ngIf="isCustomer()">
+
+        <!-- ── CUSTOMER HOME ── -->
+        <ng-container
+          *ngIf="activeTab === 'customer-home' || activeTab === 'customer-order' || activeTab === 'customer-feedback'">
+
+          <!-- HERO SECTION - CUSTOMER ONLY VIDEO HERO -->
+          <!-- HERO SECTION - CUSTOMER ONLY FOOD VIDEO HERO -->
+          <div class="customer-video-hero">
+            <video #foodHeroVideo class="customer-hero-video" autoplay muted loop playsinline preload="auto"
+              (loadedmetadata)="foodHeroVideo.muted = true; foodHeroVideo.play()">
+              <source src="https://cdn.pixabay.com/video/2022/07/10/123629-728697948_large.mp4" type="video/mp4" />
+            </video>
+
+            <div class="customer-hero-dark-overlay"></div>
+
+            <div class="customer-hero-content">
+              <button class="customer-hero-top-btn" type="button" (click)="goToOrders()">
+                Explore Let Me Dine
+                <span>→</span>
+              </button>
+
+              <h1 class="customer-hero-title">
+                <span>Welcome to</span>
+                <strong>Let Me Dine</strong>
+              </h1>
+
+              <p class="customer-hero-subtitle">
+                Discover delicious food, explore curated dishes, and place your next order
+                with a premium dining experience.
+              </p>
+
+              <div class="customer-hero-actions">
+                <button class="customer-hero-main-btn" type="button" (click)="goToOrders()">
+                  Place an Order
+                  <span>🛒</span>
+                </button>
+
+                <button class="customer-hero-outline-btn" type="button" (click)="goToFeedback()">
+                  Give Feedback
+                  <span>💬</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MENU HIGHLIGHTS -->
+          <div class="cust-section">
+            <div class="cust-section-header">
+              <div class="cust-section-title-wrap">
+                <span class="cust-section-badge">✨ Today's Picks</span>
+                <h2 class="cust-section-title">Menu Highlights</h2>
+                <p class="cust-section-sub">Freshly curated dishes our chefs are proud of</p>
+              </div>
+              <button class="cust-view-all-btn" (click)="goToOrders()">View Full Menu →</button>
+            </div>
+
+            <div class="food-grid">
+              <div class="food-card" *ngFor="let dish of featuredDishes" (click)="goToOrders()">
+                <div class="food-card-img-wrap">
+                  <img [src]="dish.img" [alt]="dish.name" class="food-card-img" loading="lazy" />
+                  <span class="food-card-tag">{{ dish.tag }}</span>
+                  <div class="food-card-overlay">
+                    <button class="food-order-btn">Order Now 🛒</button>
+                  </div>
+                </div>
+                <div class="food-card-body">
+                  <div class="food-card-top">
+                    <h3 class="food-card-name">{{ dish.name }}</h3>
+                    <div class="food-card-rating">
+                      <span class="star">★</span>
+                      <span class="rating-val">{{ dish.rating }}</span>
+                    </div>
+                  </div>
+                  <p class="food-card-desc">{{ dish.desc }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA CARDS -->
+          <div class="cust-section">
+            <div class="cust-cta-cards">
+
+              <div class="cust-cta-card order-card" (click)="goToOrders()">
+                <div class="cta-card-glow"></div>
+                <div class="cta-card-content">
+                  <div class="cta-card-icon">🛒</div>
+                  <div class="cta-card-text">
+                    <h3>Ready to Order?</h3>
+                    <p>Browse restaurants, pick your favourites and place your order in seconds.</p>
+                    <ul class="cta-feature-list">
+                      <li>🏛 Explore nearby restaurants</li>
+                      <li>🍽 Full menu with photos & prices</li>
+                      <li>📦 Live order tracking</li>
+                    </ul>
+                  </div>
+                  <button class="cta-card-btn">Place an Order <span>→</span></button>
+                </div>
+              </div>
+
+              <div class="cust-cta-card feedback-card" (click)="goToFeedback()">
+                <div class="cta-card-glow"></div>
+                <div class="cta-card-content">
+                  <div class="cta-card-icon">💬</div>
+                  <div class="cta-card-text">
+                    <h3>Share Your Experience</h3>
+                    <p>Help us serve you better. Your feedback shapes every dish we make.</p>
+                    <ul class="cta-feature-list">
+                      <li>⭐ Rate your meals & service</li>
+                      <li>✏ Write detailed reviews</li>
+                      <li>📋 View your past feedback</li>
+                    </ul>
+                  </div>
+                  <button class="cta-card-btn">Give Feedback <span>→</span></button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </ng-container>
+
+      </ng-container>
+
+    </div>
+  </main>
+</div>

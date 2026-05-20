@@ -1,0 +1,6 @@
+POST  https://orchardsolvemb64.lntedutech.com/project/4666/proxy/3000/api/auth/send-otp
+Content-Type: application/json
+
+{
+    "email":"realayushjoshi@gmail.com"
+}

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+
+<!-- ================= Backend ================= -->
+
+
+<property name="testGetFeedbackAllDetails" 
+          value="Verify retrieval of all feedback records from the repository"/>
+
+<property name="testFeedbackCustomerNamePersistence"
+          value="Verify customer name is correctly saved and retrieved in feedback"/>
+<property name="testFindByMenuItemId_MultipleRecords"
+          value="Verify retrieval of multiple feedback records for a specific menu item ID"/>
+<property name="testCreateFeedback_VerifyMenuItemLink"
+          value="Verify that feedback is correctly associated with the specified menu item during creation"/>
+
+<property name="testCreateFeedBack"
+          value="Verify feedback creation and persistence in the repository"/>
+
+<property name="testRepositorySaveCalledOnce"
+          value="Verify that the repository save method is invoked exactly once during feedback creation"/>
+<property name="testRepositoryFindAllCalled"
+          value="Verify that repository findAll method is invoked when retrieving all feedback records"/>
+<property name="testCreateFeedback_VerifyRating"
+          value="Verify that the rating value is correctly stored and retrieved when creating feedback"/>
+
+<property name="testFeedbackCommentNotEmpty"
+          value="Verify that feedback comment is not empty and is properly stored during creation"/>
+
+<property name="testFindByMenuItemId"
+          value="Verify retrieval of feedback records for a given menu item ID"/>
+
+<property name="testFindByMenuItemId_EmptyList"
+          value="Verify that an empty list is returned when no feedback exists for the given menu item ID"/>
+<property name="testGetFeedbackAllDetails_Empty"
+          value="Verify that an empty list is returned when no feedback records are available"/>
+<property name="testGetMenuItemById_Found"
+          value="Verify that a menu item is successfully retrieved when a valid ID is provided"/>
+<property name="testUpdateMenuItem_VerifyPriceChange"
+          value="Verify that the price of a menu item is correctly updated when modified"/>
+<property name="testDeleteMenuItem_RemovesFromOrderItems"
+          value="Verify that deleting a menu item removes it from all associated order items"/>
+<property name="testUpdateMenuItem_Found"
+          value="Verify that an existing menu item is successfully updated with new details"/>
+
+<property name="testUpdateMenuItem_NotFound" 
+          value="Verify that update operation returns null when the menu item does not exist"/>
+
+<property name="testDeleteMenuItem_NoOrders" 
+          value="Verify that a menu item is deleted successfully when it is not associated with any orders"/>
+
+<property name="testRepositoryFindByIdCalled" 
+          value="Verify that the repository findById method is invoked during menu item retrieval"/>
+
+<property name="testDeleteMenuItem" 
+          value="Verify that a menu item is deleted and associated records are updated accordingly"/>
+
+<property name="testMenuItemDuplicateEntries"
+          value="Verify that multiple menu items including duplicates are handled correctly during retrieval"/>
+
+<property name="testMenuItemNamePersistence" 
+          value="Verify that menu item name is correctly saved and retrieved from the repository"/>
+
+<property name="testMenuItemPriceValidation" 
+          value="Verify that menu item price is accepted and validated during creation"/>
+
+<property name="testGetMenuItemById_NotFound" 
+          value="Verify that no menu item is returned when an invalid ID is provided"/>
+
+<property name="testGetAllMenuItems" 
+          value="Verify retrieval of all available menu items from the repository"/>
+<property name="testDeleteMenuItem_NotFound"
+          value="Verify that an exception is thrown when attempting to delete a non-existing menu item"/>
+
+<property name="testMenuItemRestaurantAssociation" 
+          value="Verify that a menu item is correctly associated with its restaurant during creation"/>
+
+<property name="testUpdateMenuItem_IdUnchanged" 
+          value="Verify that the menu item ID remains unchanged after an update operation"/>
+
+<property name="testGetAllMenuItems_EmptyList" 
+          value="Verify that an empty list is returned when no menu items are available"/>
+
+<property name="testAddMenuItem" 
+          value="Verify that a new menu item is successfully added and persisted in the repository"/>
+
+<property name="testGetOrderById_Found"
+          value="Verify that an order is successfully retrieved when a valid order ID is provided"/>
+
+<property name="testGetOrderById_NotFound" 
+          value="Verify that no order is returned when an invalid order ID is provided"/>
+
+<property name="testGetOrdersByCustomer" 
+          value="Verify retrieval of all orders associated with a specific customer"/>
+
+<property name="testPlaceOrder_Success" 
+          value="Verify that an order is successfully placed when valid restaurant details are provided"/>
+
+<property name="testGetAllOrders" 
+          value="Verify retrieval of all orders from the repository"/>
+
+<property name="testPlaceOrder_RestaurantNotFound"
+          value="Verify that order placement fails when the specified restaurant is not found"/>
+
+<property name="testCustomerDetails_Exists" 
+          value="Verify that customer details check returns true when the customer exists"/>
+
+<property name="testCustomerDetails_NotExists" 
+          value="Verify that customer details check returns false when the customer does not exist"/>
+
+<property name="testGetAllAssignments"
+          value="Verify retrieval of all restaurant manager assignments with correct details"/>
+
+<property name="testAssignManager_AlreadyAssigned" 
+          value="Verify that assigning a manager already linked to a restaurant throws an error"/>
+
+<property name="testAssignManager_Success" 
+          value="Verify successful assignment of a manager to a restaurant"/>
+          <property name="testGetRestaurantById_NotFound"
+          value="Verify that no restaurant is returned when an invalid restaurant ID is provided"/>
+
+<property name="testDeleteRestaurant_NotFound" 
+          value="Verify that an exception is thrown when attempting to delete a non-existing restaurant"/>
+
+<property name="testCreateRestaurant" 
+          value="Verify successful creation of a restaurant with associated menu items"/>
+
+<property name="testDeleteRestaurant" 
+          value="Verify deletion of a restaurant and proper handling of associated orders and menu items"/>
+
+<property name="testUpdateRestaurant" 
+          value="Verify that restaurant details are correctly updated with new values"/>
+
+<property name="testGetRestaurantById_Found" 
+          value="Verify that a restaurant is successfully retrieved when a valid ID is provided"/>
+
+<property name="testGetAllRestaurants" 
+          value="Verify retrieval of all restaurants from the repository"/>
+<property name="contextLoads"
+          value="Verify that the Spring Boot application context loads successfully without errors"/>
+
+<property name="testLoadUserByUsername_NotFound" 
+          value="Verify that an exception is thrown when attempting to load a non-existing user by username"/>
+
+<property name="testRegisterUser" 
+          value="Verify successful user registration with password encoding and persistence"/>
+
+<property name="testFindByUsername" 
+          value="Verify retrieval of user details by username from the repository"/>
+
+<property name="testGetUserRolesDetails" 
+          value="Verify retrieval of all users along with their roles"/>
+
+<property name="testLoadUserByUsername_Found" 
+          value="Verify successful loading of user details when a valid username is provided"/>
+
+<property name="testGetUserByUsername" 
+          value="Verify fetching user entity using username service method"/>
+
+
+<!-- ================= Frontend ================= -->
+
+<property name="FeedbackService should submit feedback" value="FeedbackService should submit feedback"/>
+<property name="FeedbackService should get feedback by menu item ID" value="FeedbackService should get feedback by menu item ID"/>
+<property name="FeedbackService should get all feedback details" value="FeedbackService should get all feedback details"/>
+<property name="FeedbackService should include Authorization header in GET all" value="FeedbackService should include Authorization header in GET all"/>
+<property name="FeedbackService should include Authorization header in GET by menu item" value="FeedbackService should include Authorization header in GET by menu item"/>
+<property name="FeedbackService should handle empty response for getFeedbackAllDetails" value="FeedbackService should handle empty response for getFeedbackAllDetails"/>
+<property name="FeedbackService should handle empty response for getFeedbackByMenuItem" value="FeedbackService should handle empty response for getFeedbackByMenuItem"/>
+<property name="FeedbackService should handle error on submitFeedback" value="FeedbackService should handle error on submitFeedback"/>
+<property name="FeedbackService should handle error on getFeedbackAllDetails" value="FeedbackService should handle error on getFeedbackAllDetails"/>
+<property name="FeedbackService should handle error on getFeedbackByMenuItem" value="FeedbackService should handle error on getFeedbackByMenuItem"/>
+<property name="FeedbackService should call correct URL for submitFeedback" value="FeedbackService should call correct URL for submitFeedback"/>
+<property name="FeedbackService should use GET method for getFeedbackAllDetails" value="FeedbackService should use GET method for getFeedbackAllDetails"/>
+<property name="FeedbackService should use GET method for getFeedbackByMenuItem" value="FeedbackService should use GET method for getFeedbackByMenuItem"/>
+
+<property name="FeedbackComponent should create the component" value="FeedbackComponent should create the component"/>
+<property name="FeedbackComponent should initialize form and load data on init" value="FeedbackComponent should initialize form and load data on init"/>
+<property name="FeedbackComponent should submit valid feedback" value="FeedbackComponent should submit valid feedback"/>
+<property name="FeedbackComponent should reset form after submit" value="FeedbackComponent should reset form after submit"/>
+<property name="FeedbackComponent should load feedback list" value="FeedbackComponent should load feedback list"/>
+<property name="FeedbackComponent should handle empty feedback response" value="FeedbackComponent should handle empty feedback response"/>
+<property name="FeedbackComponent should set logged in user" value="FeedbackComponent should set logged in user"/>
+<property name="FeedbackComponent should set customer availability" value="FeedbackComponent should set customer availability"/>
+<property name="FeedbackComponent should load menu items" value="FeedbackComponent should load menu items"/>
+<property name="FeedbackComponent should call service on submit" value="FeedbackComponent should call service on submit"/>
+<property name="FeedbackComponent should call getFeedbackAllDetails on init" value="FeedbackComponent should call getFeedbackAllDetails on init"/>
+
+<property name="LoginComponent should create the component" value="LoginComponent should create the component"/>
+
+<property name="MenuItemComponent should create the component" value="MenuItemComponent should create the component"/>
+<property name="MenuItemComponent should load menu items on init" value="MenuItemComponent should load menu items on init"/>
+<property name="MenuItemComponent should load restaurants on init" value="MenuItemComponent should load restaurants on init"/>
+<property name="MenuItemComponent should submit a new menu item" value="MenuItemComponent should submit a new menu item"/>
+<property name="MenuItemComponent should update an existing menu item" value="MenuItemComponent should update an existing menu item"/>
+<property name="MenuItemComponent should patch form when editing a menu item" value="MenuItemComponent should patch form when editing a menu item"/>
+<property name="MenuItemComponent should delete a menu item" value="MenuItemComponent should delete a menu item"/>
+<property name="MenuItemComponent should cancel edit and reset form" value="MenuItemComponent should cancel edit and reset form"/>
+
+<property name="MenuItemService should fetch all menu items" value="MenuItemService should fetch all menu items"/>
+<property name="MenuItemService should fetch a menu item by ID" value="MenuItemService should fetch a menu item by ID"/>
+<property name="MenuItemService should add a new menu item" value="MenuItemService should add a new menu item"/>
+<property name="MenuItemService should update a menu item" value="MenuItemService should update a menu item"/>
+<property name="MenuItemService should delete a menu item" value="MenuItemService should delete a menu item"/>
+
+<property name="RestaurantService should handle error when fetching all restaurants" 
+          value="RestaurantService should handle error when fetching all restaurants"/>
+
+<property name="OrderComponent should create the component" value="OrderComponent should create the component"/>
+<property name="OrderComponent should calculate total amount correctly" value="OrderComponent should calculate total amount correctly"/>
+<property name="OrderComponent should submit a new order" value="OrderComponent should submit a new order"/>
+<property name="OrderComponent should confirm and submit pending order" value="OrderComponent should confirm and submit pending order"/>
+<property name="OrderComponent should cancel an order" value="OrderComponent should cancel an order"/>
+<property name="OrderComponent should view an order and disable form" value="OrderComponent should view an order and disable form"/>
+<property name="OrderComponent should cancel view and enable form" value="OrderComponent should cancel view and enable form"/>
+
+<property name="OrderService should place an order" value="OrderService should place an order"/>
+<property name="OrderService should get all orders" value="OrderService should get all orders"/>
+<property name="OrderService should get order by ID" value="OrderService should get order by ID"/>
+<property name="OrderService should get orders by customer ID" value="OrderService should get orders by customer ID"/>
+<property name="OrderService should cancel an order" value="OrderService should cancel an order"/>
+
+<property name="RestaurantComponent should create the component" value="RestaurantComponent should create the component"/>
+<property name="RestaurantComponent should load restaurants on init" value="RestaurantComponent should load restaurants on init"/>
+<property name="RestaurantComponent should submit new restaurant" value="RestaurantComponent should submit new restaurant"/>
+<property name="RestaurantComponent should edit restaurant and patch form" value="RestaurantComponent should edit restaurant and patch form"/>
+<property name="RestaurantComponent should cancel edit and reset form" value="RestaurantComponent should cancel edit and reset form"/>
+<property name="RestaurantComponent should delete restaurant" value="RestaurantComponent should delete restaurant"/>
+<property name="RestaurantComponent should logout and navigate to login" value="RestaurantComponent should logout and navigate to login"/>
+<property name="RestaurantComponent should fetch user role details" value="RestaurantComponent should fetch user role details"/>
+
+<property name="RestaurantService should be created" value="RestaurantService should be created"/>
+<property name="RestaurantService should fetch all restaurants" value="RestaurantService should fetch all restaurants"/>
+<property name="RestaurantService should fetch restaurant by ID" value="RestaurantService should fetch restaurant by ID"/>
+<property name="RestaurantService should create a restaurant" value="RestaurantService should create a restaurant"/>
+<property name="RestaurantService should update a restaurant" value="RestaurantService should update a restaurant"/>
+<property name="RestaurantService should delete a restaurant by ID" value="RestaurantService should delete a restaurant by ID"/>
+
+</properties>
