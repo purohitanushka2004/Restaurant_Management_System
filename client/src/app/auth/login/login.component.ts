@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     YOUR CAPTCHA SITE KEY
   */
   readonly recaptchaSiteKey =
-    '6LeDv0QtAAAAAM3dycQ833qHyrFekjTgH8Jfmnj_';
+    '${RAZORPAY_KEY_SECRET}';
 
   // ─────────────────────────────────────────────
   // SUBSCRIPTIONS
