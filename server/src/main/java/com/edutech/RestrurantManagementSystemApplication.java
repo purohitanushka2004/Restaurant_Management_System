@@ -34,7 +34,7 @@ public class RestrurantManagementSystemApplication {
                 admin.setRole(Role.ADMIN);
                 admin.setSessionId("ADMIN_SESSION");
                 userRepository.save(admin);
-				admin.setEmail("admin123@gmail.com");
+				admin.setEmail("purohitanushka2004@gmail.com");
             }
         };
     }

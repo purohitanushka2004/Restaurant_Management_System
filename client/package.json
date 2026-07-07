@@ -1,12 +1,13 @@
 {
   "name": "LogiTrack",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve --disable-host-check --port 3000",
+    "build": "node node_modules/@angular/cli/bin/ng.js build",
     "test": "ng test"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^14.2.0",
     "@angular/common": "^14.2.0",
@@ -19,8 +20,8 @@
     "@ngrx/effects": "^14.2.0",
     "@ngrx/store": "^14.2.0",
     "@ngrx/store-devtools": "^14.2.0",
-    "bootstrap": "^5.2.3",
-    "jquery": "^3.7.0",
+    "bootstrap": "^5.3.8",
+    "jquery": "^3.7.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

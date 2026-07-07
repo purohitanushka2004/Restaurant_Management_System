@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     YOUR CAPTCHA SITE KEY
   */
   readonly recaptchaSiteKey =
-    '6LdrH-wsAAAAANv-nV_t9teWYCeIDCmOkDr3OVum';
+    '6LeDv0QtAAAAAM3dycQ833qHyrFekjTgH8Jfmnj_';
 
   // ─────────────────────────────────────────────
   // SUBSCRIPTIONS

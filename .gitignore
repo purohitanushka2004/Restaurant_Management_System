@@ -1,0 +1,25 @@
+# Angular
+client/node_modules/
+client/dist/
+
+# Node
+server/node_modules/
+
+# Maven build files
+server/target/
+
+# Environment files
+.env
+*.env
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

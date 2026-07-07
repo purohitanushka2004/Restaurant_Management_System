@@ -610,7 +610,7 @@ else if (this.authService.isManager()) {
   this.paymentService.createOrder(totalPaise).subscribe({
     next: (response: any) => {
       const options = {
-        key: 'rzp_test_Sr3Wysqx5rbOFB', 
+        key: 'rzp_test_TAYkIXh0nTedg6', 
         amount: response.amount,
         currency: response.currency || 'INR',
         name: 'Restaurant System',
