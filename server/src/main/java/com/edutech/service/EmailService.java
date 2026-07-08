@@ -1,69 +1,37 @@
 package com.edutech.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmailService {
 
-    @Value("${BREVO_API_KEY}")
-    private String brevoApiKey;
-
-    @Value("${BREVO_SENDER_EMAIL:purohitanushka7@gmail.com}")
-    private String senderEmail;
-
-    @Value("${BREVO_SENDER_NAME:Let me Dine}")
-    private String senderName;
-
-    private final RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private JavaMailSender mailSender;
 
     public void sendOtpEmail(String toEmail, String otp) {
 
         try {
+            MimeMessage message = mailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setSubject("OTP Verification - Let me Dine");
 
             String htmlContent = buildOtpEmailTemplate(otp);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("api-key", brevoApiKey);
+            helper.setText(htmlContent, true);
 
-            Map<String, String> sender = new HashMap<>();
-            sender.put("name", senderName);
-            sender.put("email", senderEmail);
+            mailSender.send(message);
 
-            Map<String, String> recipient = new HashMap<>();
-            recipient.put("email", toEmail);
-
-            Map<String, Object> body = new HashMap<>();
-            body.put("sender", sender);
-            body.put("to", List.of(recipient));
-            body.put("subject", "OTP Verification - Let me Dine");
-            body.put("htmlContent", htmlContent);
-
-            HttpEntity<Map<String, Object>> request =
-                    new HttpEntity<>(body, headers);
-
-            ResponseEntity<String> response = restTemplate.postForEntity(
-                    "https://api.brevo.com/v3/smtp/email",
-                    request,
-                    String.class
-            );
-
-            System.out.println("Brevo Response: " + response.getStatusCode());
-            System.out.println(response.getBody());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to send OTP email via Brevo", e);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Failed to send OTP email", e);
         }
     }
 
@@ -151,4 +119,16 @@ public class EmailService {
             otp
         );
     }
+
+    // public void sendResetPasswordEmail(String toEmail, String resetLink) {
+    //     SimpleMailMessage message = new SimpleMailMessage();
+    //     message.setTo(toEmail);
+    //     message.setSubject("Reset Your password");
+    //     message.setText("Click the link below to reset your password:\n\n" +
+    //             resetLink + "\n\nThis link will expire in 15 minutes" +
+    //             "\n\nIf you did not request password reset, ignore this email" + "\n\n-Let me Dine"
+    //     );
+    //
+    //     mailSender.send(message);
+    // }
 }
